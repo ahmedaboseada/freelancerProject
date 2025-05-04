@@ -1,10 +1,12 @@
-const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { checkMail } = require('../utils/CheckMail');
+const responseWrapper = require('../utils/responseWrapper');
+const responseTypes = require('../utils/responseTypes');
+const ApiError = require('../utils/apiError');
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
     try {
         const { name, email, password, phone, profile, role } = req.body;
 
@@ -51,15 +53,12 @@ const register = async (req, res) => {
         console.log("ACCESS_TOKEN:", ACCESS_TOKEN);
         console.log("REFRESH_TOKEN:", REFRESH_TOKEN);
 
-        res.status(201).json({
-            message: "User registered successfully",
-            ACCESS_TOKEN,
-            REFRESH_TOKEN,
-        });
+        responseWrapper(res,responseTypes.CREATED,"User registered successfully", {ACCESS_TOKEN, REFRESH_TOKEN});
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
+        const statusCode = error.code || responseTypes.SERVER_ERROR.code;
+        const message = statusCode === 400 ? error.message : responseTypes.SERVER_ERROR.message;
+        return next(new ApiError(message, statusCode));
     }
 };
 
