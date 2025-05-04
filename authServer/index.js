@@ -7,6 +7,7 @@ const ApiError = require("./utils/apiError");
 const errorHandler = require("./middlewares/errorHandler");
 require("./utils/responseWrapper");
 
+
 bodyParser.urlencoded({ extended: false });
 
 // Logging html
@@ -31,10 +32,10 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Routes import
-
+const authRoute = require("./routes/authRoutes");
 
 // Routes using
-
+app.use('/api/auth', authRoute);
 
 // Handling invalid routes
 app.use((req, res, next) => {
@@ -43,6 +44,7 @@ app.use((req, res, next) => {
 
 // Global error handling middleware for express
 app.use(errorHandler);
+
 
 // Database connection
 const db = require("./config/db");
