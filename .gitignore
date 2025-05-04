@@ -6,9 +6,9 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
-/../authServer/node_modules/
-/../authServer/.env
-/../communicationServer/node_modules/
-/../communicationServer/.env
-/../jobServer/node_modules/
-/../jobServer/.env
+/authServer/node_modules/
+/authServer/.env
+/communicationServer/node_modules/
+/communicationServer/.env
+/jobServer/node_modules/
+/jobServer/.env
