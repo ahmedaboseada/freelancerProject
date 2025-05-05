@@ -50,9 +50,6 @@ const register = async (req, res, next) => {
 
         const { ACCESS_TOKEN, REFRESH_TOKEN } = generateTokens(savedUser._id, savedUser.role);
 
-        console.log("ACCESS_TOKEN:", ACCESS_TOKEN);
-        console.log("REFRESH_TOKEN:", REFRESH_TOKEN);
-
         responseWrapper(res,responseTypes.CREATED,"User registered successfully", {ACCESS_TOKEN, REFRESH_TOKEN});
 
     } catch (error) {
