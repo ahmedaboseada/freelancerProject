@@ -37,6 +37,7 @@ const authRoute = require("./routes/authRoutes");
 // Routes using
 app.use('/api/auth', authRoute);
 
+
 // Handling invalid routes
 app.use((req, res, next) => {
     next(new ApiError(`Can't find ${req.originalUrl} on this server`, 400));
