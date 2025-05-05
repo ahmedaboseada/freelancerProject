@@ -18,7 +18,7 @@ const RegistrationController = AsyncHandler(async (req, res, next) => {
 
         if (response.statusCode === 201) {
             req.session.refreshToken = response.data.REFRESH_TOKEN;
-            return responseWrapper(res, responseTypes.CREATED, "User registered successfully", response.data);
+            return responseWrapper(res, responseTypes.CREATED, "User registered successfully", response.data.REFRESH_TOKEN);
         } else {
             return responseWrapper(res, response.statusCode || responseTypes.BAD_REQUEST.code, response.message || "Something went wrong");
         }
