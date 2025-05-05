@@ -1,11 +1,12 @@
 // gateway: 8000, authServer: 5000, user,other...:5001,5002,5003, front: 3000
-
 const express = require("express");
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const ApiError = require("./utils/apiError");
 const errorHandler = require("./middlewares/errorHandler");
 require("./utils/responseWrapper");
+const sessions = require("express-session");
+
 
 bodyParser.urlencoded({ extended: false });
 
@@ -17,11 +18,21 @@ const morgan = require("morgan");
 const app = express();
 const cors = require("cors");
 
+
 // Middlewares - before routes
 app.use(cors({
     origin: `${process.env.ENDPOINT_AUTH}`,
 }));
 app.use(bodyParser.json());
+app.use(sessions({
+    secret: process.env.SESSION_KEY,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: process.env.NODE_ENV === "production", // Set to true in production
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+    },
+}))
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
     console.log(`mode: ${process.env.NODE_ENV}`);
@@ -31,10 +42,10 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Routes import
-
+const authRoute = require("./routes/authRoutes");
 
 // Routes using
-
+app.use('/api/auth', authRoute);
 
 // Handling invalid routes
 app.use((req, res, next) => {
@@ -44,17 +55,9 @@ app.use((req, res, next) => {
 // Global error handling middleware for express
 app.use(errorHandler);
 
+
 // Database connection
-
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
-  console.log('MongoDB connected');
-}).catch((err) => {
-  console.error('MongoDB Connection Error:', err);
-});
-
+const db = require("./config/db");
 
 // Server configuration
 const PORT = process.env.PORT;
