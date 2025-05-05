@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const ApiError = require("./utils/apiError");
 const errorHandler = require("./middlewares/errorHandler");
 require("./utils/responseWrapper");
+const session = require('express-session');
 
 
 bodyParser.urlencoded({ extended: false });
@@ -17,10 +18,22 @@ const morgan = require("morgan");
 // Express app
 const app = express();
 const cors = require("cors");
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'supersecret',
+    resave: false,
+    saveUninitialized: false, 
+    cookie: {
+      httpOnly: true,
+      secure: false, 
+      maxAge: 1000 * 60 * 60 * 24 
+    }
+  }));
+  
 
 // Middlewares - before routes
 app.use(cors({
-    origin: `${process.env.ENDPOINT_AUTH}`,
+    origin: `${process.env.ENDPOINT_AUTH}`, 
+    credentials: true //for cookies
 }));
 app.use(bodyParser.json());
 if (process.env.NODE_ENV === "development") {

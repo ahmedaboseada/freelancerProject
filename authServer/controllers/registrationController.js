@@ -8,12 +8,14 @@ const ApiError = require('../utils/apiError');
 
 const register = async (req, res, next) => {
     try {
-        const { name, email, password, phone, profile, role } = req.body;
+        const { name, email, password,confirmPassword, phone, profile, role } = req.body;
 
-        if (!name || !email || !password || !phone || !profile || !role) {
+        if (!name || !email || !password || !confirmPassword || !phone || !profile || !role) {
             return res.status(400).json({ message: "All fields are required" });
         }
-
+        if (password !== confirmPassword) {
+            return res.status(400).json({ message: "Passwords do not match" });
+        }
         const findEmail = await User.findOne({ 'email.emailAddress': email });
         if (findEmail) {
             return res.status(400).json({ message: "Email is already in use" });

@@ -7,12 +7,18 @@ const ApiError = require('../utils/apiError');
 
 const login = async (req, res, next) => {
     try {
-        const { email, password } = req.body;
+        const { identifier, password } = req.body; 
 
+      
+        const user = await User.findOne({
+            $or: [
+                { 'email.emailAddress': identifier },  
+                { 'phone.phoneNumber': identifier }   
+            ]
+        });
 
-        const user = await User.findOne({ 'email.emailAddress': email });
         if (!user) {
-            return res.status(401).json({ message: "Email not registered" });
+            return res.status(401).json({ message: "Email or Phone not registered" });
         }
         
         const isMatch = await bcrypt.compare(password, user.password);
@@ -36,7 +42,7 @@ const login = async (req, res, next) => {
 
  
 
-        responseWrapper(res,responseTypes.CREATED,"login successful", {ACCESS_TOKEN, REFRESH_TOKEN});
+        responseWrapper(res,responseTypes.SUCCESS,"login successful", {ACCESS_TOKEN, REFRESH_TOKEN});
 
     } catch (error) {
         const statusCode = error.code || responseTypes.SERVER_ERROR.code;
