@@ -11,24 +11,25 @@ const register = async (req, res, next) => {
         const { name, email, password,confirmPassword, phone, profile, role } = req.body;
 
         if (!name || !email || !password || !confirmPassword || !phone || !profile || !role) {
-            return res.status(400).json({ message: "All fields are required" });
+            return next(new ApiError("All fields are required", responseTypes.BAD_REQUEST.code));
         }
         if (password !== confirmPassword) {
-            return res.status(400).json({ message: "Passwords do not match" });
+            return next(new ApiError("Passwords do not match", responseTypes.BAD_REQUEST.code));
         }
         const findEmail = await User.findOne({ 'email.emailAddress': email });
+
         if (findEmail) {
-            return res.status(400).json({ message: "Email is already in use" });
+            return next(new ApiError("Email is already in use", responseTypes.BAD_REQUEST.code));
         }
 
         const findPhone = await User.findOne({ 'phone.phoneNumber': phone });
         if (findPhone) {
-            return res.status(400).json({ message: "Phone number is already in use" });
+            return next(new ApiError("Phone number is already in use", responseTypes.BAD_REQUEST.code));
         }
 
         const isEmailValid = await checkMail(email);
         if (isEmailValid === 'UNDELIVERABLE') {
-            return res.status(400).json({ message: "Invalid email address" });
+            return next(new ApiError("Invalid email address", responseTypes.BAD_REQUEST.code));
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);

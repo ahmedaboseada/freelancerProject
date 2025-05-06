@@ -1,11 +1,10 @@
 function errorHandler(err, req, res) {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
+
   if (process.env.NODE_ENV === "development") {
-    // eslint-disable-next-line no-use-before-define
     return sendErrorForDev(err, res);
   }
-  // eslint-disable-next-line no-use-before-define
   return sendErrorForProd(err, res);
 }
 

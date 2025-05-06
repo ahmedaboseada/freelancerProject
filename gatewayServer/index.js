@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 const ApiError = require("./utils/apiError");
 const errorHandler = require("./middlewares/errorHandler");
 require("./utils/responseWrapper");
-const sessions = require("express-session");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 
 
 bodyParser.urlencoded({ extended: false });
@@ -18,21 +19,27 @@ const morgan = require("morgan");
 const app = express();
 const cors = require("cors");
 
+app.set("trust proxy", false);
 
 // Middlewares - before routes
 app.use(cors({
     origin: `${process.env.ENDPOINT_AUTH}`,
 }));
 app.use(bodyParser.json());
-app.use(sessions({
+
+app.use(session({
     secret: process.env.SESSION_KEY,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     cookie: {
-        secure: process.env.NODE_ENV === "production", // Set to true in production
+        secure: process.env.NODE_ENV === "production", // HTTPS in production
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-    },
-}))
+        sameSite: "None", // Allow cross-site cookies (for cross-domain testing)
+    }
+}));
+
+
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
     console.log(`mode: ${process.env.NODE_ENV}`);

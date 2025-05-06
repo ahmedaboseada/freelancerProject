@@ -32,9 +32,7 @@ if (process.env.NODE_ENV === "development") {
 
 // Routes import
 
-
 // Routes using
-
 
 // Handling invalid routes
 app.use((req, res, next) => {

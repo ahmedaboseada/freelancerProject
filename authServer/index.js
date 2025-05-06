@@ -1,13 +1,10 @@
 // gateway: 8000, authServer: 5000, user,other...:5001,5002,5003, front: 3000
-
 const express = require("express");
 require("dotenv").config();
 const bodyParser = require("body-parser");
 const ApiError = require("./utils/apiError");
 const errorHandler = require("./middlewares/errorHandler");
 require("./utils/responseWrapper");
-const session = require('express-session');
-
 
 bodyParser.urlencoded({ extended: false });
 
@@ -18,17 +15,6 @@ const morgan = require("morgan");
 // Express app
 const app = express();
 const cors = require("cors");
-app.use(session({
-    secret: process.env.SESSION_SECRET || 'supersecret',
-    resave: false,
-    saveUninitialized: false, 
-    cookie: {
-      httpOnly: true,
-      secure: false, 
-      maxAge: 1000 * 60 * 60 * 24 
-    }
-  }));
-  
 
 // Middlewares - before routes
 app.use(cors({
