@@ -6,11 +6,19 @@ const ApiError = require('../../utils/apiError');
 
 const RegistrationController = AsyncHandler(async (req, res, next) => {
     if (req.session.refreshToken) {
-        return next(new ApiError("You are already logged in", responseTypes.CONFLICT.code));
+        return next(new ApiError("You are already logged in", responseTypes.BAD_REQUEST.code));
     }
     const {name, email, password, confirmPassword, phone, profile, role} = req.body;
 
     if (!name || !email || !password || !confirmPassword || !phone || !profile || !role) {
+        console.log("All fields are required")
+        console.log(name)
+        console.log(email)
+        console.log(password)
+        console.log(confirmPassword)
+        console.log(phone)
+        console.log(profile)
+        console.log(role)
         return responseWrapper(res, responseTypes.BAD_REQUEST, "All fields are required");
     }
 
@@ -18,7 +26,7 @@ const RegistrationController = AsyncHandler(async (req, res, next) => {
 
     try {
         const response = await fetchAnotherServer(`${process.env.AUTH_SERVER}/api/auth/signup`, 'POST', data);
-
+        console.log("response")
         if (response.statusCode === 201) {
             req.session.refreshToken = response.data.REFRESH_TOKEN;
             return responseWrapper(res, responseTypes.CREATED, "User registered successfully", response.data.REFRESH_TOKEN);

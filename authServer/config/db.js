@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 
 mongoose.connect(process.env.MONGO_URI).then((conn) => {
   console.log(`Database Connected: ${conn.connection.host}`);
+}).catch((err) => {
+    console.log(`Database Connection Failed: ${err.message}`);
 });
 
 module.exports = mongoose;

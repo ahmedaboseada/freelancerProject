@@ -9,6 +9,11 @@ const ApiError = require('../utils/apiError');
 const register = async (req, res, next) => {
     try {
         const { name, email, password,confirmPassword, phone, profile, role } = req.body;
+        console.log(req.body)
+        console.log("sssss")
+        console.log("req.body", req.body)
+        console.log("role", role)
+        console.log("req.query", req.query)
 
         if (!name || !email || !password || !confirmPassword || !phone || !profile || !role) {
             return next(new ApiError("All fields are required", responseTypes.BAD_REQUEST.code));

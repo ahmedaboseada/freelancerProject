@@ -5,8 +5,9 @@ const ApiError = require('../../utils/apiError');
 
 const loginController = async (req, res, next) => {
     if (req.session.refreshToken) {
-        return next(new ApiError("You are already logged in", responseTypes.CONFLICT.code));
+        return next(new ApiError("You are already logged in", responseTypes.BAD_REQUEST.code));
     }
+
     const {identifier, password} = req.body;
 
     if (!identifier || !password) {

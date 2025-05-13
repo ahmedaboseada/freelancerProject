@@ -33,7 +33,57 @@ const fetchAnotherServerWithoutBody = async (url, method = 'GET') => {
         },
     };
 
-    const response = await fetch(url, options);
+
+    let response;
+    try {
+        response = await fetch(url, options);
+    } catch (fetchError) {
+        const error = new Error('Failed to connect to internal server');
+        error.code = 503; // Service Unavailable
+        throw error;
+    }
+
+    let json;
+    try {
+        json = await response.json();
+    } catch (parseError) {
+        const error = new Error('Invalid response from internal server');
+        error.code = response.status || 500;
+        throw error;
+    }
+
+    return {
+        statusCode: response.status,
+        ...json,
+    };
+};
+
+
+const fetch = require('node-fetch');
+
+
+const fetchAnotherServerWithQuery = async (url, method = 'GET', data = {}) => {
+    const queryParts = [];
+    for (const [key, value] of Object.entries(data)) {
+        if (value !== undefined && value !== null) {
+            queryParts.push(`${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
+        }
+    }
+    const queryString = queryParts.join('&');
+    const fullUrl = queryString ? `${url}?${queryString}` : url;
+
+    console.log('Full URL sent to the server:', fullUrl);
+
+    const options = {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+            'x-internal-secret': process.env.INTERNAL_SECRET,
+        },
+    };
+
+    const response = await fetch(fullUrl, options);
+
     const json = await response.json();
 
     if (!response.ok) {
@@ -48,4 +98,5 @@ const fetchAnotherServerWithoutBody = async (url, method = 'GET') => {
     };
 };
 
-module.exports = { fetchAnotherServer, fetchAnotherServerWithoutBody };
+
+module.exports = {fetchAnotherServer, fetchAnotherServerWithoutBody, fetchAnotherServerWithQuery};

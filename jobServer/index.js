@@ -1,5 +1,4 @@
 // gateway: 8000, authServer: 5000, user,other...:5001,5002,5003, front: 3000
-
 const express = require("express");
 require("dotenv").config();
 const bodyParser = require("body-parser");
@@ -20,7 +19,9 @@ const cors = require("cors");
 // Middlewares - before routes
 app.use(cors({
     origin: `${process.env.ENDPOINT_AUTH}`,
+    credentials: true //for cookies
 }));
+
 app.use(bodyParser.json());
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
@@ -31,10 +32,10 @@ if (process.env.NODE_ENV === "development") {
 }
 
 // Routes import
-
+const jobRoute = require("./routes/jobRoutes");
 
 // Routes using
-
+app.use('/api/job', jobRoute);
 
 // Handling invalid routes
 app.use((req, res, next) => {
@@ -44,17 +45,9 @@ app.use((req, res, next) => {
 // Global error handling middleware for express
 app.use(errorHandler);
 
+
 // Database connection
-
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}).then(() => {
-  console.log('MongoDB connected');
-}).catch((err) => {
-  console.error('MongoDB Connection Error:', err);
-});
-
+const db = require("./config/db");
 
 // Server configuration
 const PORT = process.env.PORT;

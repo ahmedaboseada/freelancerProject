@@ -1,4 +1,5 @@
-// gateway: 8000, authServer: 5000, user,other...:5001,5002,5003, front: 3000
+// // gateway: 8000, authServer: 5000, user,other...:5001,5002,5003, front: 3000
+
 const express = require("express");
 require("dotenv").config();
 const bodyParser = require("body-parser");
@@ -7,9 +8,10 @@ const errorHandler = require("./middlewares/errorHandler");
 require("./utils/responseWrapper");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
+const cookieParser = require('cookie-parser');
 
 
-bodyParser.urlencoded({ extended: false });
+bodyParser.urlencoded({extended: false});
 
 // Logging html
 // eslint-disable-next-line import/order
@@ -21,24 +23,31 @@ const cors = require("cors");
 
 app.set("trust proxy", false);
 
+
 // Middlewares - before routes
 app.use(cors({
     origin: `${process.env.ENDPOINT_AUTH}`,
 }));
 app.use(bodyParser.json());
+app.use(cookieParser());  // Add this middleware at the top of your middleware stack
 
 app.use(session({
     secret: process.env.SESSION_KEY,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,
+        ttl: 7 * 24 * 60 * 60, // 7 days
+        autoRemove: 'native',
+        collectionName: 'sessions'
+    }),
     cookie: {
-        secure: process.env.NODE_ENV === "production", // HTTPS in production
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        sameSite: "None", // Allow cross-site cookies (for cross-domain testing)
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
     }
 }));
-
 
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
@@ -50,9 +59,12 @@ if (process.env.NODE_ENV === "development") {
 
 // Routes import
 const authRoute = require("./routes/authRoutes");
+const jobRoute = require("./routes/jobRoutes");
 
 // Routes using
 app.use('/api/auth', authRoute);
+app.use('/api/job', jobRoute);
+
 
 // Handling invalid routes
 app.use((req, res, next) => {
@@ -62,9 +74,8 @@ app.use((req, res, next) => {
 // Global error handling middleware for express
 app.use(errorHandler);
 
-
-// Database connection
-const db = require("./config/db");
+// Connect to DB and configure Google OAuth
+const db = require("./config/db")
 
 // Server configuration
 const PORT = process.env.PORT;
