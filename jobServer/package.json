@@ -1,7 +1,7 @@
 {
-  "name": "authserver",
+  "name": "jobServer",
   "version": "1.0.0",
-  "description": "freelancer project authentication server",
+  "description": "Freelancer Project Job Server",
   "homepage": "https://github.com/ahmedaboseada/freelancerProject#readme",
   "bugs": {
     "url": "https://github.com/ahmedaboseada/freelancerProject/issues"

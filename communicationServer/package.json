@@ -1,7 +1,7 @@
 {
-  "name": "authserver",
+  "name": "communicationServer",
   "version": "1.0.0",
-  "description": "freelancer project authentication server",
+  "description": "Freelancer Project Communication Server",
   "homepage": "https://github.com/ahmedaboseada/freelancerProject#readme",
   "bugs": {
     "url": "https://github.com/ahmedaboseada/freelancerProject/issues"
@@ -15,9 +15,12 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^3.1.10"
   },
   "dependencies": {

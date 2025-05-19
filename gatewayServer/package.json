@@ -1,7 +1,7 @@
 {
-  "name": "authserver",
+  "name": "gatewayServer",
   "version": "1.0.0",
-  "description": "freelancer project authentication server",
+  "description": "Freelancer Project Gateway Server",
   "homepage": "https://github.com/ahmedaboseada/freelancerProject#readme",
   "bugs": {
     "url": "https://github.com/ahmedaboseada/freelancerProject/issues"
@@ -35,7 +35,6 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "bcryptjs": "^3.0.2",
     "body-parser": "^2.2.0",
     "connect-mongo": "^5.1.0",
     "cookie-parser": "^1.4.7",

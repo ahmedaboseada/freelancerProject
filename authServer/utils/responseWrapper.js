@@ -1,4 +1,4 @@
-function responseWrapper(res, typeObj, customMessage = null, data = null) {
+function responseWrapper(res, typeObj, customMessage = null, data = undefined) {
     const { code, status, message } = typeObj;
 
     return res.status(code).json({

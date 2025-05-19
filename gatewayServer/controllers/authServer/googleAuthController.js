@@ -6,12 +6,9 @@ const ApiError = require('../../utils/apiError');
 
 const googleAuthController = async (req, res, next) => {
     try {
-        console.log(req.session.refreshToken)
         if (req.session.refreshToken) {
-            console.log("Already logged in");
             return next(new ApiError("You are already logged in", responseTypes.BAD_REQUEST.code));
         }
-        console.log(req.session.refreshToken)
 
         let { role } = req.query;  // Get role from query params
 

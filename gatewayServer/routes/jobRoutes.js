@@ -8,6 +8,7 @@ const getJobByIdController = require('../controllers/jobServer/jobController/get
 const updateJobByIdController = require('../controllers/jobServer/jobController/updateJobByIdController');
 const deleteJobByIdController = require('../controllers/jobServer/jobController/deleteJobByIdController');
 const getAllJobsForAClientController = require('../controllers/jobServer/jobController/getAllJobsForAClientController');
+const setJobStatusController = require('../controllers/jobServer/jobController/setJobStatusController');
 
 const verifyToken = require('../middlewares/jwtVerify');
 
@@ -19,6 +20,7 @@ router
     .get('/client/:clientId', getAllJobsForAClientController)
     .post('/create/:id', createJobController)
     .put('/:id', updateJobByIdController)
+    .put('/:id/status', setJobStatusController)
     .delete('/:id', deleteJobByIdController);
 
 module.exports = router;

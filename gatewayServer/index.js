@@ -10,7 +10,6 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const cookieParser = require('cookie-parser');
 
-
 bodyParser.urlencoded({extended: false});
 
 // Logging html

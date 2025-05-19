@@ -9,6 +9,7 @@ const getJobByIdController = require('../controllers/jobController/getJobByIdCon
 const updateJobByIdController = require('../controllers/jobController/updateJobByIdController');
 const deleteJobByIdController = require('../controllers/jobController/deleteJobByIdController');
 const getAllJobsForAClientController = require('../controllers/jobController/getAllJobsForAClientController');
+const setJobStatusController = require('../controllers/jobController/setJobStatusController');
 
 router.use(checkRequestAuthentication);
 
@@ -18,6 +19,7 @@ router
     .get('/client/:clientId', getAllJobsForAClientController)
     .post('/create/:id', createJobController)
     .put('/:id', updateJobByIdController)
+    .put('/:id/status', setJobStatusController)
     .delete('/:id', deleteJobByIdController);
 
 

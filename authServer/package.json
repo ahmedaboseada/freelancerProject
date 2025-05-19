@@ -1,7 +1,7 @@
 {
-  "name": "authserver",
+  "name": "authServer",
   "version": "1.0.0",
-  "description": "freelancer project authentication server",
+  "description": "Freelancer Project Authentication Server",
   "homepage": "https://github.com/ahmedaboseada/freelancerProject#readme",
   "bugs": {
     "url": "https://github.com/ahmedaboseada/freelancerProject/issues"
@@ -15,7 +15,7 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "cross-env NODE_ENV=production node index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.js"
   },
@@ -29,6 +29,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.4.0",
     "eslint-plugin-react": "^7.37.5",
+    "jest": "^29.7.0",
     "nodemon": "^3.1.10",
     "prettier": "^3.5.3"
   },

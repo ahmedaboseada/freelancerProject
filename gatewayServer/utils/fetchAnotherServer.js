@@ -1,3 +1,5 @@
+const fetch = require('node-fetch');
+
 const fetchAnotherServer = async (url, method = 'POST', data = {}) => {
     const options = {
         method,
@@ -8,9 +10,23 @@ const fetchAnotherServer = async (url, method = 'POST', data = {}) => {
         body: JSON.stringify(data),
     };
 
-    const response = await fetch(url, options);
+    let response;
+    try {
+        response = await fetch(url, options);
+    } catch (fetchError) {
+        const error = new Error('Failed to connect to internal server');
+        error.code = 503; // Service Unavailable
+        throw error;
+    }
 
-    const json = await response.json();
+    let json;
+    try {
+        json = await response.json();
+    } catch (parseError) {
+        const error = new Error('Invalid response from internal server');
+        error.code = response.status || 500;
+        throw error;
+    }
 
     if (!response.ok) {
         const error = new Error(json.message || 'Request to internal server failed');
@@ -59,8 +75,6 @@ const fetchAnotherServerWithoutBody = async (url, method = 'GET') => {
 };
 
 
-const fetch = require('node-fetch');
-
 
 const fetchAnotherServerWithQuery = async (url, method = 'GET', data = {}) => {
     const queryParts = [];
@@ -72,8 +86,6 @@ const fetchAnotherServerWithQuery = async (url, method = 'GET', data = {}) => {
     const queryString = queryParts.join('&');
     const fullUrl = queryString ? `${url}?${queryString}` : url;
 
-    console.log('Full URL sent to the server:', fullUrl);
-
     const options = {
         method,
         headers: {
@@ -82,9 +94,23 @@ const fetchAnotherServerWithQuery = async (url, method = 'GET', data = {}) => {
         },
     };
 
-    const response = await fetch(fullUrl, options);
+    let response;
+    try {
+        response = await fetch(fullUrl, options);
+    } catch (fetchError) {
+        const error = new Error('Failed to connect to internal server');
+        error.code = 503; // Service Unavailable
+        throw error;
+    }
 
-    const json = await response.json();
+    let json;
+    try {
+        json = await response.json();
+    } catch (parseError) {
+        const error = new Error('Invalid response from internal server');
+        error.code = response.status || 500;
+        throw error;
+    }
 
     if (!response.ok) {
         const error = new Error(json.message || 'Request to internal server failed');
