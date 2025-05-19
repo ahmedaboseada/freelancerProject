@@ -59,10 +59,12 @@ if (process.env.NODE_ENV === "development") {
 // Routes import
 const authRoute = require("./routes/authRoutes");
 const jobRoute = require("./routes/jobRoutes");
+const proposalRoute = require("./routes/proposalRoutes");
 
 // Routes using
 app.use('/api/auth', authRoute);
 app.use('/api/job', jobRoute);
+app.use('/api/proposal', proposalRoute);
 
 
 // Handling invalid routes

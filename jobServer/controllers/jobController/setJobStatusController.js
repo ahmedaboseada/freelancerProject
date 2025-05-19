@@ -1,4 +1,3 @@
-// In jobServer/controllers/jobController/setJobStatusController.js
 const Job = require('../../models/job');
 const responseWrapper = require('../../utils/responseWrapper');
 const responseTypes = require('../../utils/responseTypes');

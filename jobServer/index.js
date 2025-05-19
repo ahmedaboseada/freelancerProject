@@ -33,9 +33,11 @@ if (process.env.NODE_ENV === "development") {
 
 // Routes import
 const jobRoute = require("./routes/jobRoutes");
+const proposalRoute = require("./routes/proposalRoutes");
 
 // Routes using
 app.use('/api/job', jobRoute);
+app.use('/api/proposal', proposalRoute);
 
 // Handling invalid routes
 app.use((req, res, next) => {
