@@ -73,17 +73,24 @@ const db = require("./config/db");
 
 // Server configuration
 const PORT = process.env.PORT;
-const server = app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
-});
+// const server = app.listen(PORT, () => {
+//     console.log(`Server started on port ${PORT}`);
+// });
 
 // Handle unhandled rejections outside async functions
+// process.on("unhandledRejection", (err) => {
+//     console.log(`Unhandled Rejection: ${err.message}`);
+//     console.log(`MongoDB Connection Error: ${err.name} | ${err.message}`);
+//     server.close(() => {
+//         // Stop pending processes
+//         console.log("Server closed");
+//         process.exit(1);
+//     }); // close server to prevent memory leak
+// });
 process.on("unhandledRejection", (err) => {
-    console.log(`Unhandled Rejection: ${err.message}`);
-    console.log(`MongoDB Connection Error: ${err.name} | ${err.message}`);
-    server.close(() => {
-        // Stop pending processes
-        console.log("Server closed");
-        process.exit(1);
-    }); // close server to prevent memory leak
+    console.error(`Unhandled Rejection: ${err.message}`);
+    // No server to close in Vercel serverless
+    process.exit(1);
 });
+
+module.exports = app
