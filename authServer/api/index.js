@@ -1,10 +1,10 @@
 const express = require("express");
 require("dotenv").config();
 const bodyParser = require("body-parser");
-const ApiError = require("./utils/apiError");
-const errorHandler = require("./middlewares/errorHandler");
-require("./utils/responseWrapper");
-const passport = require("./config/passport");
+const ApiError = require("../utils/apiError");
+const errorHandler = require("../middlewares/errorHandler");
+require("../utils/responseWrapper");
+const passport = require("../config/passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 bodyParser.urlencoded({ extended: false });
@@ -53,8 +53,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes import
-const authRoute = require("./routes/authRoutes");
-const googleRoute = require("./routes/googleRoutes");
+const authRoute = require("../routes/authRoutes");
+const googleRoute = require("../routes/googleRoutes");
 
 // Routes using
 app.use('/api/auth/', googleRoute);
@@ -69,7 +69,7 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 // Database connection
-const db = require("./config/db");
+const db = require("../config/db");
 
 // Server configuration
 const PORT = process.env.PORT;

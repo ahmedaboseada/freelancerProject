@@ -13,14 +13,14 @@
   "license": "ISC",
   "author": "Ahmed Abu Seada",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "api/index.js",
     "engines": {
         "node": ">=16.0.0"
     },
   "scripts": {
     "test": "jest",
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
