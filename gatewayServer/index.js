@@ -20,13 +20,15 @@ const morgan = require("morgan");
 const app = express();
 const cors = require("cors");
 
-app.set("trust proxy", false);
+app.set("trust proxy", 1);
 
 
 // Middlewares - before routes
-app.use(cors({
-    origin: `${process.env.ENDPOINT_AUTH}`,
-}));
+// app.use(cors({
+//     origin: `${process.env.ENDPOINT_AUTH}`,
+//     credentials: true
+// }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());  // Add this middleware at the top of your middleware stack
 
@@ -41,7 +43,7 @@ app.use(session({
         collectionName: 'sessions'
     }),
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === 'production', // true in production (requires HTTPS)
         httpOnly: true,
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'

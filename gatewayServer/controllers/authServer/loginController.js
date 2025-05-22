@@ -4,7 +4,9 @@ const responseTypes = require('../../utils/responseTypes');
 const ApiError = require('../../utils/apiError');
 
 const loginController = async (req, res, next) => {
-
+    console.log("Session ID:", req.sessionID);
+    console.log("Stored refreshToken:", req.session.refreshToken);
+    console.log(req.session.refreshToken)
     if (req.session.refreshToken) {
         return next(new ApiError("You are already logged in", responseTypes.BAD_REQUEST.code));
     }
@@ -20,8 +22,13 @@ const loginController = async (req, res, next) => {
     try {
         const response = await fetchAnotherServer(`${process.env.AUTH_SERVER}/api/auth/login`, 'POST', data);
         if (response.statusCode === 200) {
-            req.session.refreshToken = response.data.REFRESH_TOKEN;
-            return responseWrapper(res, responseTypes.SUCCESS, "Logged in successfully", {REFRESH_TOKEN:response.data.REFRESH_TOKEN});
+            const refreshToken = response.data.refreshToken;
+            req.session.refreshToken = refreshToken;
+            console.log("Stored refreshToken in session:", req.session.refreshToken);
+            // responseWrapper(res, responseTypes.SUCCESS, "Logged in successfully", {REFRESH_TOKEN:response.data.REFRESH_TOKEN});
+            responseWrapper(res, responseTypes.SUCCESS, "Logged in successfully", {
+                refreshToken: refreshToken
+            });
         } else {
             return next(new ApiError(response.message || "Something went wrong", response.statusCode || responseTypes.BAD_REQUEST.code));
         }

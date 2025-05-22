@@ -37,7 +37,11 @@ const login = async (req, res, next) => {
             {expiresIn: "7d"}
         );
 
-        responseWrapper(res, responseTypes.SUCCESS, "User logged in successfully", {ACCESS_TOKEN, REFRESH_TOKEN});
+        responseWrapper(res, responseTypes.SUCCESS, "User logged in successfully", {
+            accessToken: ACCESS_TOKEN,
+            refreshToken: REFRESH_TOKEN
+        });
+
 
     } catch (error) {
         const statusCode = error.code || responseTypes.SERVER_ERROR.code;

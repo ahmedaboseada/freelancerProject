@@ -1,0 +1,31 @@
+{
+  "name": "freelancer-project",
+  "version": "1.0.0",
+  "description": "Freelancer Project Monorepo",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"PORT=3000 npm run start --prefix authServer\" \"PORT=3001 npm run start --prefix gatewayServer\" \"PORT=3002 npm run start --prefix jobServer\" \"PORT=3003 npm run start --prefix communicationServer\"",
+    "dev": "concurrently \"PORT=3000 npm run dev --prefix authServer\" \"PORT=3001 npm run dev --prefix gatewayServer\" \"PORT=3002 npm run dev --prefix jobServer\" \"PORT=3003 npm run dev --prefix communicationServer\"",
+    "start:auth": "PORT=3000 npm run start --prefix authServer",
+    "start:gateway": "PORT=3001 npm run start --prefix gatewayServer",
+    "start:job": "PORT=3002 npm run start --prefix jobServer",
+    "start:comm": "PORT=3003 npm run start --prefix communicationServer",
+    "dev:auth": "PORT=3000 npm run dev --prefix authServer",
+    "dev:gateway": "PORT=3001 npm run dev --prefix gatewayServer",
+    "dev:job": "PORT=3002 npm run dev --prefix jobServer",
+    "dev:comm": "PORT=3003 npm run dev --prefix communicationServer"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "author": "ahmed abu seada, toka ismail",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmedaboseada/freelancerProject.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ahmedaboseada/freelancerProject/issues"
+  },
+  "homepage": "https://github.com/ahmedaboseada/freelancerProject#readme"
+}
