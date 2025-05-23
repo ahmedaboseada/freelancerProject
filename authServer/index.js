@@ -1,13 +1,14 @@
 const express = require("express");
 require("dotenv").config();
 const bodyParser = require("body-parser");
-const ApiError = require("../utils/apiError");
-const errorHandler = require("../middlewares/errorHandler");
-require("../utils/responseWrapper");
-const passport = require("../config/passport");
+const ApiError = require("./utils/apiError");
+const errorHandler = require("./middlewares/errorHandler");
+require("./utils/responseWrapper");
+const passport = require("./config/passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 bodyParser.urlencoded({ extended: false });
+
 
 // Logging html
 // eslint-disable-next-line import/order
@@ -53,8 +54,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Routes import
-const authRoute = require("../routes/authRoutes");
-const googleRoute = require("../routes/googleRoutes");
+const authRoute = require("./routes/authRoutes");
+const googleRoute = require("./routes/googleRoutes");
 
 // Routes using
 app.use('/api/auth/', googleRoute);
@@ -69,28 +70,21 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 // Database connection
-const db = require("../config/db");
+const db = require("./config/db");
 
 // Server configuration
 const PORT = process.env.PORT;
-// const server = app.listen(PORT, () => {
-//     console.log(`Server started on port ${PORT}`);
-// });
-
-// Handle unhandled rejections outside async functions
-// process.on("unhandledRejection", (err) => {
-//     console.log(`Unhandled Rejection: ${err.message}`);
-//     console.log(`MongoDB Connection Error: ${err.name} | ${err.message}`);
-//     server.close(() => {
-//         // Stop pending processes
-//         console.log("Server closed");
-//         process.exit(1);
-//     }); // close server to prevent memory leak
-// });
-process.on("unhandledRejection", (err) => {
-    console.error(`Unhandled Rejection: ${err.message}`);
-    // No server to close in Vercel serverless
-    process.exit(1);
+const server = app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
 });
 
-module.exports = app
+// Handle unhandled rejections outside async functions
+process.on("unhandledRejection", (err) => {
+    console.log(`Unhandled Rejection: ${err.message}`);
+    console.log(`MongoDB Connection Error: ${err.name} | ${err.message}`);
+    server.close(() => {
+        // Stop pending processes
+        console.log("Server closed");
+        process.exit(1);
+    }); // close server to prevent memory leak
+});
