@@ -8,6 +8,7 @@ const passport = require("./config/passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 bodyParser.urlencoded({ extended: false });
+console.log("hello")
 
 // Logging html
 // eslint-disable-next-line import/order
