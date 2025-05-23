@@ -19,8 +19,8 @@
     },
   "scripts": {
     "test": "jest",
-    "start": "node api/index.js",
-    "dev": "nodemon api/index.js"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js"
   },
   "devDependencies": {
     "cross-env": "^7.0.3",

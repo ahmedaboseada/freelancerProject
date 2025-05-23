@@ -9,6 +9,7 @@ require("./utils/responseWrapper");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const cookieParser = require('cookie-parser');
+const { authServerRun } = require('../authServer/index');
 
 bodyParser.urlencoded({extended: false});
 
@@ -81,10 +82,13 @@ app.use(errorHandler);
 const db = require("./config/db")
 
 // Server configuration
-const PORT = process.env.PORT;
+const PORT = process.env.GATEWAYPORT;
 const server = app.listen(PORT, () => {
     console.log(`Server started on port ${PORT}`);
 });
+
+authServerRun()
+
 
 // Events => listen on events => callback Fn(err)
 // Handle rejections outside async functions
