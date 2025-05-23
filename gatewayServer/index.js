@@ -101,3 +101,5 @@ process.on("unhandledRejection", (err) => {
         process.exit(1);
     }); // close server - to prevent memory leak
 });
+
+module.exports = app;
