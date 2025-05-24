@@ -81,7 +81,7 @@ router.get(
         });
 
         // Redirect to the complete page after OAuth is done
-        res.redirect('http://localhost:8000/api/auth/googleAuthComplete');
+        res.redirect('https://frgatewayserver.vercel.app/api/auth/googleAuthComplete');
     }
 );
 
