@@ -8,7 +8,7 @@ const passport = require("./config/passport");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 bodyParser.urlencoded({extended: false});
-
+console.log("Auth Server is running...");
 
 // Logging html
 // eslint-disable-next-line import/order
