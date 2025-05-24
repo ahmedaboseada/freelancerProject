@@ -8,7 +8,6 @@ require("./utils/responseWrapper");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const cookieParser = require('cookie-parser');
-const { Analytics } = require('@vercel/analytics/dist/next');
 bodyParser.urlencoded({extended: false});
 
 // Logging html
