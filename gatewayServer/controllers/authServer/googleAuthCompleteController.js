@@ -6,6 +6,7 @@ const ApiError = require('../../utils/apiError');
 const googleAuthCompleteController = (req, res, next) => {
     try {
         const { accessToken } = req.cookies;  // Access token from cookies
+        console.log("Access Token:", accessToken);
 
         if (!accessToken) {
             return next(new ApiError("Access token is missing", responseTypes.UNAUTHORIZED.code));

@@ -67,6 +67,7 @@ router.get(
             process.env.JWT_ACCESS_TOKEN_SECRET,
             { expiresIn: "30s" }
         );
+        console.log("Access Token:", accessToken);
 
         const refreshToken = jwt.sign(
             { id: req.user._id, role: req.user.role },
@@ -79,6 +80,7 @@ router.get(
             maxAge: 30000,
             httpOnly: true,
         });
+        console.log(req.cookies);
 
         // Redirect to the complete page after OAuth is done
         res.redirect('https://frgatewayserver.vercel.app/api/auth/googleAuthComplete');
