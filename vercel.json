@@ -2,14 +2,26 @@
   "version": 2,
   "builds": [
     {
-      "src": "./gatewayServer/index.js",
+      "src": "api/auth.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "api/gateway.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/(.*)",
-      "dest": "gatewayServer/index.js"
+      "src": "/api/auth/(.*)",
+      "dest": "api/auth.js"
+    },
+    {
+      "src": "/api/job/(.*)",
+      "dest": "api/gateway.js"
+    },
+    {
+      "src": "/api/proposal/(.*)",
+      "dest": "api/gateway.js"
     }
   ]
 }

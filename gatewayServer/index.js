@@ -1,5 +1,4 @@
-// // gateway: 8000, authServer: 5000, user,other...:5001,5002,5003, front: 3000
-
+// // // gateway: 8000, authServer: 5000, user,other...:5001,5002,5003, front: 3000
 const express = require("express");
 require("dotenv").config();
 const bodyParser = require("body-parser");
@@ -9,7 +8,6 @@ require("./utils/responseWrapper");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const cookieParser = require('cookie-parser');
-const { authServerRun } = require('../authServer/index');
 
 bodyParser.urlencoded({extended: false});
 
@@ -29,27 +27,26 @@ app.set("trust proxy", 1);
 //     origin: `${process.env.ENDPOINT_AUTH}`,
 //     credentials: true
 // }));
+app.use(cors());
+
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(cookieParser());  // Add this middleware at the top of your middleware stack
 
 app.use(session({
+    name: "freelancer.sid",
     secret: process.env.SESSION_KEY,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI,
-        ttl: 7 * 24 * 60 * 60, // 7 days
-        autoRemove: 'native',
-        collectionName: 'sessions'
-    }),
+    store: MongoStore.create({mongoUrl: process.env.MONGO_URI}),
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // true in production (requires HTTPS)
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'None',
         httpOnly: true,
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+        maxAge: 7 * 24 * 60 * 60 * 1000,
     }
 }));
+
 
 if (process.env.NODE_ENV === "development") {
     app.use(morgan("dev"));
@@ -83,23 +80,22 @@ const db = require("./config/db")
 
 // Server configuration
 const PORT = process.env.GATEWAYPORT;
-// const server = app.listen(PORT, () => {
-//     console.log(`Server started on port ${PORT}`);
-// });
+const server = app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
+});
 
-authServerRun()
+// authServerRun()
 
 
 // Events => listen on events => callback Fn(err)
 // Handle rejections outside async functions
 process.on("unhandledRejection", (err) => {
-    // console.log(`Unhandled Rejection: ${err.message}`);
-    // console.log(`MongoDB Connection Error: ${err.name} | ${err.message}`);
-    // server.close(() => {
-    //     // Stop pending processes
-    //     console.log("Server closed");
+    console.log(`Unhandled Rejection: ${err.message}`);
+    console.log(`MongoDB Connection Error: ${err.name} | ${err.message}`);
+    server.close(() => {
+        // Stop pending processes
+        console.log("Server closed");
         process.exit(1);
     }); // close server - to prevent memory leak
-// });
+});
 
-module.exports = app;

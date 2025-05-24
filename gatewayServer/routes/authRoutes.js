@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const registrationController = require('../controllers/authServer/registrationController');
+const registrationController = require('../controllers/authServer/RegistrationController');
 const loginController = require('../controllers/authServer/loginController');
 const logoutController = require('../controllers/authServer/logoutController');
 const googleAuthController = require('../controllers/authServer/googleAuthController');

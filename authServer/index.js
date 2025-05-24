@@ -1,7 +1,5 @@
 const express = require("express");
-require("dotenv").config({
-    path: `${__dirname}/.env`,
-});
+require("dotenv").config();
 const bodyParser = require("body-parser");
 const ApiError = require("./utils/apiError");
 const errorHandler = require("./middlewares/errorHandler");
@@ -24,17 +22,11 @@ const cors = require("cors");
 const authRoute = require("./routes/authRoutes");
 const googleRoute = require("./routes/googleRoutes");
 
-
-exports.authServerRun = () => {
-
-
     // Middlewares - before routes
-    app.use(cors({
-        origin: `${process.env.ENDPOINT_AUTH}`,
-        credentials: true, // for cookies
-    }));
+app.use(cors())
 
-    app.use(bodyParser.json());
+
+app.use(bodyParser.json());
 
     if (process.env.NODE_ENV === "development") {
         app.use(morgan("dev"));
@@ -45,19 +37,20 @@ exports.authServerRun = () => {
     }
 
 // Express session setup before Passport
-    app.use(
-        session({
-            secret: process.env.SESSION_KEY,
-            resave: false,
-            saveUninitialized: false,
-            store: MongoStore.create({mongoUrl: process.env.MONGO_URI}),
-            cookie: {
-                secure: false, // Should be true in production (HTTPS)
-                sameSite: "None",
-                maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-            },
-        })
-    );
+app.use(session({
+    name: "freelancer.sid",
+    secret: process.env.SESSION_KEY,
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'None',
+        httpOnly: true,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    }
+}));
+
 
 // Passport initialization
     app.use(passport.initialize());
@@ -96,4 +89,5 @@ exports.authServerRun = () => {
             process.exit(1);
         }); // close server to prevent memory leak
     });
-}
+// }
+

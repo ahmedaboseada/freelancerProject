@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { checkMail } = require('../utils/CheckMail');
+const { checkMail } = require('../utils/checkMail');
 const responseWrapper = require('../utils/responseWrapper');
 const responseTypes = require('../utils/responseTypes');
 const ApiError = require('../utils/apiError');
