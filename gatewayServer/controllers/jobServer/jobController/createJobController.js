@@ -5,25 +5,20 @@ const ApiError = require('../../../utils/apiError');
 
 const createJobController = async (req, res, next) => {
     try {
-        req.accessToken = req.headers.authorization.split(' ')[1];
-        jwt.verify(req.accessToken, process.env.JWT_ACCESS_TOKEN_SECRET, (err, user) => {
-            if (err) {
-                return next(new ApiError("Invalid access token", responseTypes.UNAUTHORIZED.code));
-            }
-            req.user = user;
-        })
-        if (!req.accessToken) {
+       
+        if (!req.session.refreshToken) {
             return next(new ApiError("You have to login first!", responseTypes.UNAUTHORIZED.code));
         }
-
 
 
         if (!req.user) {
             return next(new ApiError("You have to login first!", responseTypes.UNAUTHORIZED.code));
         }
-        if (req.user.role !== 'client') {
+
+                if (req.user.role !== 'client') {
             return next(new ApiError("You are not authorized to create a job", responseTypes.UNAUTHORIZED.code));
         }
+
         const {title, description, skillsRequired, budget, timeline, category, attachments = []} = req.body;
         const clientId = req.params.id;
 

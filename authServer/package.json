@@ -13,7 +13,7 @@
   "license": "ISC",
   "author": "Ahmed Abu Seada",
   "type": "commonjs",
-  "main": "api/index.js",
+  "main": "index.js",
   "engines": {
     "node": ">=16.0.0"
   },

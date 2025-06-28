@@ -12,15 +12,15 @@ const setJobStatusController = require('../controllers/jobServer/jobController/s
 
 const verifyToken = require('../middlewares/jwtVerify');
 
-router.use(verifyToken)
+router.use(verifyToken);
 
 router
-    .get('/',getAllJobsController)
-    .get('/:id',getJobByIdController)
-    .get('/client/:clientId', getAllJobsForAClientController)
-    .post('/create/:id', createJobController)
-    .put('/:id', updateJobByIdController)
-    .put('/:id/status', setJobStatusController)
-    .delete('/:id', deleteJobByIdController);
+  .get('/', getAllJobsController)
+  .get('/:id', getJobByIdController)
+  .get('/client/:clientId', getAllJobsForAClientController)
+  .post('/create/:id', createJobController)
+  .put('/:id', updateJobByIdController)
+  .put('/:id/status', setJobStatusController)
+  .delete('/:id', deleteJobByIdController);
 
 module.exports = router;
