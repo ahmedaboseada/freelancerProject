@@ -3,7 +3,8 @@ const Job = require('../../models/job');
 const responseWrapper = require('../../utils/responseWrapper');
 const responseTypes = require('../../utils/responseTypes');
 const ApiError = require('../../utils/apiError');
-
+const User = require('../../models/user');
+const { encrypt, decrypt } = require('../../utils/crypto');
 const approveMilestoneController = async (req, res, next) => {
     const milestoneId = req.params.id;
 
@@ -20,6 +21,18 @@ const approveMilestoneController = async (req, res, next) => {
         milestone.status = "approved";
         milestone.paymentStatus = "released";
         await milestone.save();
+
+        const freelancer = await User.findById(milestone.freelancer);
+
+        if (!freelancer) {
+            return next(new ApiError("Freelancer not found", responseTypes.NOT_FOUND.code));
+        }
+        // Update freelancer's balance
+        let decryptedBalance = Number(decrypt(freelancer.balance));
+        // milestone number - balance string
+        decryptedBalance+= milestone.amount;
+        freelancer.balance = encrypt(freelancer.balance.toString());
+        await freelancer.save();
 
         const allMilestones = await Milestone.find({ job: milestone.job });
         const allApproved = allMilestones.every(m => m.status === "approved");

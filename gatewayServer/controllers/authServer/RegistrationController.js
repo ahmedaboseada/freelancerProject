@@ -13,13 +13,13 @@ const RegistrationController = AsyncHandler(async (req, res, next) => {
     if (!name || !email || !password || !confirmPassword || !phone || !profile || !role) {
         return responseWrapper(res, responseTypes.BAD_REQUEST, "All fields are required");
     }
-
     const data = {name, email, password, confirmPassword, phone, profile, role};
 
     try {
         const response = await fetchAnotherServer(`${process.env.AUTH_SERVER}/api/auth/signup`, 'POST', data);
         if (response.statusCode === 201) {
             req.session.refreshToken = response.data.REFRESH_TOKEN;
+            // send otp
             return responseWrapper(res, responseTypes.CREATED, "User registered successfully", response.data.REFRESH_TOKEN);
         } else {
             return next(new ApiError(response.message || "Something went wrong", response.statusCode || responseTypes.BAD_REQUEST.code));
