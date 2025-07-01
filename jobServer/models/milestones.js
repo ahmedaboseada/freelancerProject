@@ -36,7 +36,7 @@ const milestoneSchema = new Schema({
         },
         status: {
             type: String,
-            enum: ["pending", "in-progress", "completed", "rejected"],
+            enum: ["pending", "in-progress", "submitted","completed", "rejected"],
             default: "pending",
         },
         deliverableUrl: {
@@ -49,8 +49,20 @@ const milestoneSchema = new Schema({
         },
         paymentStatus: {
             type: String,
-            enum: ["escrowed", "released"],
+            enum: ["unpaid","escrowed", "released"],
             default: "escrowed",
+        },
+        rejectionReason: {
+            type: String,
+            optional: true,
+        },
+        deleted: {
+            type: Boolean,
+            default: false,
+        },
+        deletedAt: {
+            type: Date,
+            optional: true,
         }
     },
     {

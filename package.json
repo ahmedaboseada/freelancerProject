@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node gatewayServer/index.js",
-    "dev": "concurrently \"PORT=3000 npm run dev --prefix authServer\" \"PORT=3001 npm run dev --prefix gatewayServer\" \"PORT=3002 npm run dev --prefix jobServer\" \"PORT=3003 npm run dev --prefix communicationServer\"",
+    "dev": "concurrently \"npm run dev --prefix authServer\" \"npm run dev --prefix gatewayServer\" \"npm run dev --prefix jobServer\"",
     "start:auth": "PORT=5000 npm run start --prefix authServer",
     "start:gateway": "PORT=8000 npm run start --prefix gatewayServer",
     "start:job": "PORT=5001 npm run start --prefix jobServer",
